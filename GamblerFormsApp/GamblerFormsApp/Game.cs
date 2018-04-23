@@ -29,7 +29,7 @@ namespace GamblerFormsApp
                     for (int i = 0; i < item.Value; i++)
                     {
                         double outcome = 0.4 * (i + States[i + item.Value].Value) + 0.6 * (-i + States[item.Value - i].Value);
-                        item.Value=outcome if (outcome > item.Value) ;
+                        item.Value = (outcome > item.Value) ? outcome : item.Value;
                     }
 
                 }
