@@ -8,8 +8,13 @@ namespace GamblerFormsApp
 {
     class State
     {
-        private int _value;
+        private double _value;
 
-        public int Value { get => _value; set => _value = value; }
+        public double Value { get => _value; set => _value = value; }
+
+        public int bestBet;
+
+
+    
     }
 }
