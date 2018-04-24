@@ -54,9 +54,16 @@ namespace GamblerFormsApp
 
                 }
             }
-            return itr;
-            
-
+            return itr;      
+                    }
+        public double[] getvalues()
+        {
+            double[] Values = new double[100];
+            for (int i = 0; i < 100; i++)
+            {
+                Values[i] = States[i].Value;
+            }
+            return Values;
         }
 
         public Game(int a)
