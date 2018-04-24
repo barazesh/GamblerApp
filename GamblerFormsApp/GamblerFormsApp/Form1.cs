@@ -19,7 +19,10 @@ namespace GamblerFormsApp
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-
+            var gamblergame = new Game(100);
+            gamblergame.Initiate();
+            int a=gamblergame.ComputeStateValues(0.01);
+            textBox1.Text = "finished in " + a.ToString() + " iterations";
         }
     }
 }

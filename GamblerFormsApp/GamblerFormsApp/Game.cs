@@ -20,22 +20,43 @@ namespace GamblerFormsApp
             }
         }
 
-        private void ComputeStateValues()
+        public int ComputeStateValues(double eps)
         {
-            foreach (var item in States)
+            double variance = 2*eps;
+            int itr = 0;
+            while (variance > eps)
             {
-                if (item.Value <= 50)
+                variance = 0;
+                itr++;
+                for (int j = 1; j < stateCount; j++)
                 {
-                    for (int i = 0; i < item.Value; i++)
+                    double newStateValue;
+                    int maxbet = Math.Min(j, 100 - j);
+                    double[] outcome = new double[maxbet];
+                    //for all bets lower than the total capital and which dont conclude the game
+                    for (int i = 1; i < Math.Min(j, 100 - j); i++)
                     {
-                        double outcome = 0.4 * (i + States[i + item.Value].Value) + 0.6 * (-i + States[item.Value - i].Value);
-                        item.Value = (outcome > item.Value) ? outcome : item.Value;
+                        outcome[i] = 0.4 * (States[i + j].Value) + 0.6 * (States[j - i].Value);
                     }
+                    //for the critical bet which can conclude the game
+                    int bet = Math.Min(j, 100 - j);
+                    if (bet + j == 100)//if the gambler have the chance to reach 100$ with this bet
+                    {
+                        outcome[0] = 0.4 + 0.6 * States[j - bet].Value;
+                    }
+                    else//if the capital is less than 50 and the gambler cannot reach 100$ with this bet if he wins, but he will lose all his money if he wins
+                    {
+                        outcome[0] = 0.4 * States[j + bet].Value;
+                    }
+                    newStateValue = outcome.Max();
+                    variance = Math.Max(Math.Abs(newStateValue - States[j].Value), variance);
+                    States[j].Value = newStateValue;
 
                 }
-
-
             }
+            return itr;
+            
+
         }
 
         public Game(int a)

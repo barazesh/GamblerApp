@@ -14,7 +14,10 @@ namespace GamblerFormsApp
 
         public int bestBet;
 
-
+        public State()
+        {
+            _value = 0;
+        }
     
     }
 }
