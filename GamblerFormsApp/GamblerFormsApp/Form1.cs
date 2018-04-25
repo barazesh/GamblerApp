@@ -21,8 +21,10 @@ namespace GamblerFormsApp
         {
             var gamblergame = new Game(100);
             gamblergame.Initiate();
-            int a=gamblergame.ComputeStateValues(0.01);
+            int a=gamblergame.ComputeStateValues(0.001);
+            double[] values = gamblergame.getvalues();
             textBox1.Text = "finished in " + a.ToString() + " iterations";
+            chart1.Series["Series1"].Points.DataBindY(values);
         }
     }
 }
