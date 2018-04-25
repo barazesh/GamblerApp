@@ -19,12 +19,40 @@ namespace GamblerFormsApp
 
         private void btnStart_Click(object sender, EventArgs e)
         {
+            double eps = double.Parse(txtAccuracy.Text);
+
             var gamblergame = new Game(100);
             gamblergame.Initiate();
-            int a=gamblergame.ComputeStateValues(0.001);
+            double variance = 2 * eps;
+            int itr = 0;
+            while (variance > eps)
+            {
+                variance = 0;
+                double[] oldstate = gamblergame.getvalues();
+                double[] newState = gamblergame.ComputeStateValues();
+                
+                for (int i = 0; i < 100; i++)
+                {
+                    variance = Math.Max(variance, Math.Abs(newState[i] - oldstate[i]));
+                }
+                itr++;
+                string name = "Sweap" + itr.ToString();
+                chart1.Series.Add(name);
+                chart1.Series[name].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+                chart1.Series[name].Points.DataBindY(newState);
+
+            }
             double[] values = gamblergame.getvalues();
-            textBox1.Text = "finished in " + a.ToString() + " iterations";
-            chart1.Series["Series1"].Points.DataBindY(values);
+            textBox1.Text = "finished in " + itr.ToString() + " iterations";
+            
+        }
+
+        private void btntest_Click(object sender, EventArgs e)
+        {
+            var gamblergame = new Game(100);
+            gamblergame.Initiate();
+            double[] newState = gamblergame.ComputeStateValues();
+            textBox1.Text = "test was successfull";
         }
     }
 }
