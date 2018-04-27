@@ -27,16 +27,16 @@ namespace GamblerFormsApp
             for (int j = 1; j < stateCount; j++)
             {
 
-                int maxbet = Math.Min(j, 100 - j);
+                int maxbet = Math.Min(j, stateCount - j);
                 double[] outcome = new double[maxbet];
                 //for all bets lower than the total capital and which dont conclude the game
-                for (int i = 1; i < Math.Min(j, 100 - j); i++)
+                for (int i = 1; i < maxbet; i++)
                 {
                     outcome[i] = 0.4 * (States[i + j].Value) + 0.6 * (States[j - i].Value);
                 }
 
                 //for the critical bet which can conclude the game
-                if (maxbet + j == 100)//if the gambler have the chance to reach 100$ with this bet
+                if (maxbet + j == stateCount)//if the gambler have the chance to reach 100$ with this bet
                 {
                     outcome[0] = 0.4 + 0.6 * States[j - maxbet].Value;
                 }
@@ -45,6 +45,8 @@ namespace GamblerFormsApp
                     outcome[0] = 0.4 * States[j + maxbet].Value;
                 }
                 newStateValue[j] = outcome.Max();
+                int best = outcome.ToList().IndexOf(outcome.Max());
+                States[j].BestBet = (best == 0) ? maxbet : best;
                 States[j].Value = newStateValue[j];
             }
             newStateValue[0] = 0;
@@ -68,10 +70,22 @@ namespace GamblerFormsApp
             }
         }
 
-        public double[] getvalues()
+        public int[] GetStrategies()
         {
-            double[] Values = new double[100];
-            for (int i = 0; i < 100; i++)
+            int[] strategies = new int[stateCount];
+            for (int i = 1; i < stateCount; i++)
+            {
+                strategies[i] = States[i].BestBet;
+
+            }
+            return strategies;
+        }
+
+
+        public double[] Getvalues()
+        {
+            double[] Values = new double[stateCount];
+            for (int i = 0; i < stateCount; i++)
             {
                 Values[i] = States[i].Value;
             }

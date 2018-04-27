@@ -19,8 +19,8 @@ namespace GamblerFormsApp
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-            double eps = double.Parse(txtAccuracy.Text);
-
+            chart1.Series.Clear();
+            double eps = double.Parse(txtAccuracy.Text);            
             var gamblergame = new Game(100);
             gamblergame.Initiate();
             double variance = 2 * eps;
@@ -28,7 +28,7 @@ namespace GamblerFormsApp
             while (variance > eps)
             {
                 variance = 0;
-                double[] oldstate = gamblergame.getvalues();
+                double[] oldstate = gamblergame.Getvalues();
                 double[] newState = gamblergame.ComputeStateValues();
                 
                 for (int i = 0; i < 100; i++)
@@ -42,7 +42,10 @@ namespace GamblerFormsApp
                 chart1.Series[name].Points.DataBindY(newState);
 
             }
-            double[] values = gamblergame.getvalues();
+            int[] strategies = gamblergame.GetStrategies();
+            chart2.Series.Clear();
+            chart2.Series.Add("Strategies");
+            chart2.Series["Strategies"].Points.DataBindY(strategies);
             textBox1.Text = "finished in " + itr.ToString() + " iterations";
             
         }

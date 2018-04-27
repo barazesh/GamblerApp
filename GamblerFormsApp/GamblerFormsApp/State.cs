@@ -11,8 +11,9 @@ namespace GamblerFormsApp
         private double _value;
 
         public double Value { get => _value; set => _value = value; }
+        public int BestBet { get => bestBet; set => bestBet = value; }
 
-        public int bestBet;
+        private int bestBet=1;
 
         public State()
         {
